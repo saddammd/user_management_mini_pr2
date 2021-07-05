@@ -10,6 +10,6 @@ import com.ashok.it.demo.user.management.entity.State;
 @Repository
 public interface State_Dao extends JpaRepository<State, Integer> {
 	
-	public List<State> findSatesByCountry_id(Integer Country_id);
+	public List<State> findByCountry_id(Integer Country_id);
 
 }

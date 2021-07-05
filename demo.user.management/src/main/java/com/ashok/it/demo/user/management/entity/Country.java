@@ -13,8 +13,8 @@ import javax.persistence.Table;
 public class Country {
 	
 	@Id
-	@Column(name = "country_id")
-	private Integer country_id;
+	@Column(name = "id")
+	private Integer id;
 	
 	@Column(name = "country_code")
 	private String country_code;
@@ -31,19 +31,21 @@ public class Country {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Country(Integer country_id, String country_code, String country_name) {
+	public Country(Integer id, String country_code, String country_name) {
 		super();
-		this.country_id = country_id;
+		this.id = id;
 		this.country_code = country_code;
 		this.country_name = country_name;
 	}
 
-	public Integer getCountry_id() {
-		return country_id;
+
+
+	public Integer getId() {
+		return id;
 	}
 
-	public void setCountry_id(Integer country_id) {
-		this.country_id = country_id;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getCountry_code() {
@@ -73,7 +75,7 @@ public class Country {
 
 	@Override
 	public String toString() {
-		return "Country [country_id=" + country_id + ", country_code=" + country_code + ", country_name=" + country_name
+		return "Country [country_id=" + id + ", country_code=" + country_code + ", country_name=" + country_name
 				+ "]";
 	}
 	

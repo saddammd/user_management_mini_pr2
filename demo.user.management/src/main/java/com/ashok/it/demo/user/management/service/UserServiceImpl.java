@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ashok.it.demo.user.management.constants.AppConstants;
 import com.ashok.it.demo.user.management.dto.ForgotPasswordForm;
@@ -22,6 +23,7 @@ import com.ashok.it.demo.user.management.repository.Country_Dao;
 import com.ashok.it.demo.user.management.repository.State_Dao;
 import com.ashok.it.demo.user.management.repository.User_Dao;
 
+@Service
 public class UserServiceImpl implements UserService {
 
 	@Autowired
@@ -67,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
 		for (Country c1 : countryList) {
 
-			countries.put(c1.getCountry_id(), c1.getCountry_name());
+			countries.put(c1.getId(), c1.getCountry_name());
 		}
 
 		return countries;
@@ -77,7 +79,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Map<Integer, String> getStates(Integer country_id) {
 		
-		List<State> states = state_dao.findSatesByCountry_id(country_id);
+		List<State> states = state_dao.findByCountry_id(country_id);
 		Map<Integer,String> statesMap = new HashMap<>();
 		
 		states.forEach(state-> {
