@@ -12,6 +12,7 @@ public interface User_Dao extends JpaRepository<User, Serializable> {
 
 	public User findByEmailAndPazzword(String email, String password);
 
-	public boolean findByEmail(String email);
+	public User findByEmail(String email);
+	
 
 }

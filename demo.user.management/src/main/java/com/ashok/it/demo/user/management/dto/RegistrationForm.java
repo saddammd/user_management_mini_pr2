@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Component
 public class RegistrationForm {
 
@@ -11,7 +13,8 @@ public class RegistrationForm {
 	private String lastname;
 	private String email;
 	private Long PhoneNo;
-	private LocalDate Dob;
+	
+	private LocalDate dob;
 	private String gender;
 	private String country;
 	private String state;
@@ -40,12 +43,7 @@ public class RegistrationForm {
 	public void setPhoneNo(Long phoneNo) {
 		PhoneNo = phoneNo;
 	}
-	public LocalDate getDob() {
-		return Dob;
-	}
-	public void setDob(LocalDate dob) {
-		Dob = dob;
-	}
+	
 	public String getGender() {
 		return gender;
 	}
@@ -70,6 +68,15 @@ public class RegistrationForm {
 	public void setCity(String city) {
 		this.city = city;
 	}
+	public LocalDate getDob() {
+		return dob;
+	}
+	public void setDob(LocalDate dob) {
+		this.dob = dob;
+	}
+	
+	
+	
 
 
 

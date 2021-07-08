@@ -18,10 +18,12 @@ import com.ashok.it.demo.user.management.entity.City;
 import com.ashok.it.demo.user.management.entity.Country;
 import com.ashok.it.demo.user.management.entity.State;
 import com.ashok.it.demo.user.management.entity.User;
+import com.ashok.it.demo.user.management.properties.AppProperties;
 import com.ashok.it.demo.user.management.repository.City_Dao;
 import com.ashok.it.demo.user.management.repository.Country_Dao;
 import com.ashok.it.demo.user.management.repository.State_Dao;
 import com.ashok.it.demo.user.management.repository.User_Dao;
+import com.ashok.it.demo.user.management.util.MailUtil;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -31,13 +33,19 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private State_Dao state_dao;
-	
+
 	@Autowired
 	private City_Dao city_dao;
 
 	@Autowired
 	private User_Dao user_dao;
 
+	@Autowired
+	private AppProperties appProperties;
+	
+	@Autowired
+	private MailUtil mailUtil;
+	
 	@Override
 	public boolean verifySignIn(LoginForm loginForm) {
 
@@ -52,7 +60,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean verifyUniqueEmail(String email) {
 
-		if (user_dao.findByEmail(email)) {
+		if (user_dao.findByEmail(email)!=null) {
 			return false;
 		}
 
@@ -74,80 +82,102 @@ public class UserServiceImpl implements UserService {
 
 		return countries;
 	}
-	
 
 	@Override
 	public Map<Integer, String> getStates(Integer country_id) {
-		
+
 		List<State> states = state_dao.findByCountry_id(country_id);
-		Map<Integer,String> statesMap = new HashMap<>();
-		
-		states.forEach(state-> {
-			statesMap.put(state.getState_id(), state.getState_name());			
+		Map<Integer, String> statesMap = new HashMap<>();
+
+		states.forEach(state -> {
+			statesMap.put(state.getState_id(), state.getState_name());
 		});
-		
+
 		return statesMap;
 	}
 
 	@Override
 	public Map<Integer, String> getCities(Integer state_id) {
-	
+
 		List<City> CityList = city_dao.findCityByState_id(state_id);
 		Map<Integer, String> cityMap = new HashMap<>();
-		
-		CityList.forEach(city->{
+
+		CityList.forEach(city -> {
 			cityMap.put(city.getId(), city.getCity_name());
 		});
-				
+
 		return cityMap;
 	}
 
 	@Override
-	public User registerUser(RegistrationForm registrationForm) {
-		
-		User user_entity = new User();
-		BeanUtils.copyProperties(registrationForm, user_entity);
-		user_entity.setPassword(generateRandomPassword(6));
-		user_entity.setIsActive(false);
-				
-		return user_dao.save(user_entity);
-		
-		
+	public String registerUser(RegistrationForm registrationForm) {
 
+		if(verifyUniqueEmail(registrationForm.getEmail())) {
+			
+			User user_entity = new User();
+			BeanUtils.copyProperties(registrationForm, user_entity);
+			user_entity.setPazzword(generateRandomPassword(6));
+			user_entity.setIsActive(false);
+			user_dao.save(user_entity);
+			mailUtil.sendEmail(user_entity.getEmail(), "User Registered", "Please login with temp password" + "+user_entity.getPazzword()");
+			
+			
+			return appProperties.getGreetmessages().get(AppConstants.REGISTRATION_SUCCESS);
+			
+		}
+		
+		return appProperties.getGreetmessages().get(AppConstants.DUPLICATE_EMAIL);
+		
+}
+
+	@Override
+	public String unlockAccount(UnlockForm unlockForm) {
+
+		User available_user = user_dao.findByEmail(unlockForm.getEmail());
+		
+		if(available_user.getPazzword().equals(unlockForm.getTempPazzword())) {
+			
+			available_user.setPazzword(unlockForm.getNewPazzword());
+			available_user.setIsActive(true);
+			user_dao.save(available_user);
+			
+			return appProperties.getGreetmessages().get(AppConstants.UNLOCKED_SUCCESSFULLY);
+		}
+		
+		
+		return appProperties.getGreetmessages().get(AppConstants.UNLOCKED_FAILED);
 	}
 
 	@Override
-	public boolean unlockAccount(UnlockForm unlockForm) {
+	public boolean forgotPwd(ForgotPasswordForm forgotPasswordForm) {
 		
+		if(user_dao.findByEmail(forgotPasswordForm.getEmail())!=null) {
+			
+			//TODO send password to the email
+		
+			return true;
+		}
 		
 		
 		return false;
 	}
 
-	@Override
-	public boolean forgotPwd(ForgotPasswordForm forgotPasswordFrom) {
-		// TODO Auto-generated method stub
-		return false;
+	public static String generateRandomPassword(int len) {
+		// ASCII range – alphanumeric (0-9, a-z, A-Z)
+		final String chars = AppConstants.CHARACTERS;
+
+		SecureRandom random = new SecureRandom();
+		StringBuilder sb = new StringBuilder();
+
+		// each iteration of the loop randomly chooses a character from the given
+		// ASCII range and appends it to the `StringBuilder` instance
+
+		for (int i = 0; i < len; i++) {
+			int randomIndex = random.nextInt(chars.length());
+			sb.append(chars.charAt(randomIndex));
+		}
+
+		return sb.toString();
 	}
-	
-	public static String generateRandomPassword(int len)
-    {
-        // ASCII range – alphanumeric (0-9, a-z, A-Z)
-        final String chars = AppConstants.CHARACTERS;
- 
-        SecureRandom random = new SecureRandom();
-        StringBuilder sb = new StringBuilder();
- 
-        // each iteration of the loop randomly chooses a character from the given
-        // ASCII range and appends it to the `StringBuilder` instance
- 
-        for (int i = 0; i < len; i++)
-        {
-            int randomIndex = random.nextInt(chars.length());
-            sb.append(chars.charAt(randomIndex));
-        }
- 
-        return sb.toString();
-    }
 
 }

@@ -23,9 +23,9 @@ public interface UserService {
 	
 	public Map<Integer,String> getCities(Integer state_id);
 	
-	public User registerUser(RegistrationForm registrationForm);
+	public String registerUser(RegistrationForm registrationForm);
 	
-	public boolean unlockAccount(UnlockForm unlockForm);
+	public String unlockAccount(UnlockForm unlockForm);
 
 	public boolean forgotPwd(ForgotPasswordForm forgotPasswordFrom);
 	
