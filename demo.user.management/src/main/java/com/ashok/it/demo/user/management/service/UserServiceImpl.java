@@ -118,10 +118,12 @@ public class UserServiceImpl implements UserService {
 			BeanUtils.copyProperties(registrationForm, user_entity);
 			user_entity.setPazzword(generateRandomPassword(6));
 			user_entity.setIsActive(false);
-			user_dao.save(user_entity);
-			mailUtil.sendEmail(user_entity.getEmail(), "User Registered", "Please login with temp password" + "+user_entity.getPazzword()");
+			User user = user_dao.save(user_entity);
 			
+			String pazzword = user_entity.getPazzword();
 			
+			mailUtil.sendEmail(user.getEmail(), "Temp Password", "YOUR TEMPORARY PASSWORD IS " +pazzword);
+						
 			return appProperties.getGreetmessages().get(AppConstants.REGISTRATION_SUCCESS);
 			
 		}
