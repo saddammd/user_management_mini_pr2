@@ -1,6 +1,9 @@
 package com.ashok.it.demo.user.management.controller;
 
+import java.io.IOException;
 import java.util.Map;
+
+import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,7 +59,7 @@ public class Register_Controller {
 	}
 
 	@PostMapping("/register")
-	public String registerUser(@RequestBody RegistrationForm reg) {
+	public String registerUser(@RequestBody RegistrationForm reg) throws IOException, MessagingException {
 
 	return userService.registerUser(reg);
 	

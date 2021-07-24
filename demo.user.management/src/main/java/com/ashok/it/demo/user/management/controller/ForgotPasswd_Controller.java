@@ -1,5 +1,9 @@
 package com.ashok.it.demo.user.management.controller;
 
+import java.io.IOException;
+
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +23,7 @@ public class ForgotPasswd_Controller {
 	UserService userService;
 
 	@GetMapping("/forgot")
-	public boolean forgot(ForgotPasswordForm forgotPasswordForm) {
+	public boolean forgot(ForgotPasswordForm forgotPasswordForm) throws IOException, MessagingException {
 		 
 		return userService.forgotPwd(forgotPasswordForm);
 		

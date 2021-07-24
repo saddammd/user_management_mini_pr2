@@ -1,0 +1,9 @@
+<h1>Welcome To Ashok IT</h1>
+
+Hi {firstname} {lastname},
+
+<p>Your account has been succesfully registered</p>
+<p>please user this temp password {pwd} to unlock your account</p>
+
+<B>Thanks & Regards</B>
+Ashok IT

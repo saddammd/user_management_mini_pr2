@@ -1,6 +1,9 @@
 package com.ashok.it.demo.user.management.service;
 
+import java.io.IOException;
 import java.util.Map;
+
+import javax.mail.MessagingException;
 
 import org.springframework.stereotype.Service;
 
@@ -23,11 +26,11 @@ public interface UserService {
 	
 	public Map<Integer,String> getCities(Integer state_id);
 	
-	public String registerUser(RegistrationForm registrationForm);
+	public String registerUser(RegistrationForm registrationForm) throws IOException, MessagingException;
 	
 	public String unlockAccount(UnlockForm unlockForm);
 
-	public boolean forgotPwd(ForgotPasswordForm forgotPasswordFrom);
+	public boolean forgotPwd(ForgotPasswordForm forgotPasswordFrom) throws IOException, MessagingException;
 	
 
 }

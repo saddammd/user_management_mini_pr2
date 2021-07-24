@@ -1,7 +1,7 @@
 #MySQL
 spring:
   datasource:
-    url: jdbc:mysql://13.127.162.79:3306/ashokitmini02?useSSL=false
+    url: jdbc:mysql://65.0.5.162:3306/ashokitmini02?useSSL=false
     username: springstudent
     password: springstudent
     driver-class-name: com.mysql.cj.jdbc.Driver
